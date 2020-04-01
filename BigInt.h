@@ -72,7 +72,7 @@ public:
 
     inline int size() const;
 
-    BigInt divide(const BigInt &, int = 15) const;
+    BigInt divide(const BigInt &, int = 0) const;
 
 private:
     vector<double> bigint;

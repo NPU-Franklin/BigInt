@@ -69,13 +69,39 @@ ostream &operator<<(ostream &out, const BigInt &x) {
         int len = x.bigint.size();
         for (int i = 1; i < len; i++) {
             if (x.bigint[i] == 0.1) { out << "."; }
-            else { out << char(x.bigint[i] + '0'); }
+            else if (x.bigint[i] < 10) { out << char(x.bigint[i] + '0'); }
+            else {
+                char copy[N];
+                int tmp = x.bigint[i];
+                int k = 0;
+                while (tmp != 0) {
+                    copy[k] = tmp % 10 + '0';
+                    tmp /= 10;
+                    k++;
+                }
+                for (int j = k; j >= 0; j--) {
+                    out << copy[j];
+                }
+            }
         }
     } else {
         int len = x.bigint.size();
         for (int i = 0; i < len; i++) {
             if (x.bigint[i] == 0.1) { out << '.'; }
-            else { out << char(x.bigint[i] + '0'); }
+            else if (x.bigint[i] < 10) { out << char(x.bigint[i] + '0'); }
+            else {
+                char copy[N];
+                int tmp = x.bigint[i];
+                int k = 0;
+                while (tmp != 0) {
+                    copy[k] = tmp % 10 + '0';
+                    tmp /= 10;
+                    k++;
+                }
+                for (int j = k; j >= 0; j--) {
+                    out << copy[j];
+                }
+            }
         }
     }
     return out;
@@ -280,7 +306,7 @@ BigInt BigInt::divide(const BigInt &x, int i) const {
             } else {
                 for (int j = 0; j < i; j++) { a1.bigint.push_back(0); }
                 b1.bigint.push_back(carry);
-                int limit = i + 1 - b1.size();
+                int limit = a1.size() - 1 - b1.size();
                 for (int j = 0; j < limit; j++) { b1.bigint.push_back(0); }
 
                 for (int j = 0; j < i; j++) {
@@ -297,9 +323,12 @@ BigInt BigInt::divide(const BigInt &x, int i) const {
     } else {
         result.bigint.push_back(0);
         if (i != 0) {
+            a1 = *this;
+            b1 = x;
+
             result.bigint.push_back(0.1);
             for (int j = 0; j < i; j++) { a1.bigint.push_back(0); }
-            int limit = i + 1 - b1.size();
+            int limit = a1.size() - 1 - b1.size();
             for (int j = 0; j < limit; j++) { b1.bigint.push_back(0); }
 
             int tmp = 0;
@@ -576,7 +605,3 @@ bool operator>=(const BigInt &x, const BigInt &y) {
 inline int BigInt::size() const {
     return static_cast<int>(this->bigint.size());
 }
-
-
-
-
