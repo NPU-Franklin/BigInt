@@ -289,12 +289,12 @@ BigInt BigInt::divide(const BigInt &x, int i) const {
         }
 
         int flag = 0;
-        for (unsigned long long i = 0; i < len; i++) {
-            if (result.bigint[i] == 0) { flag++; }
+        for (unsigned long long j = 0; j < len; j++) {
+            if (result.bigint[j] == 0) { flag++; }
             else break;
         }
         reverse(result.bigint.begin(), result.bigint.end());
-        for (int i = 0; i < flag; i++) { result.bigint.pop_back(); }
+        for (int j = 0; j < flag; j++) { result.bigint.pop_back(); }
         reverse(result.bigint.begin(), result.bigint.end());
 
         if (i != 0) {
@@ -306,14 +306,17 @@ BigInt BigInt::divide(const BigInt &x, int i) const {
             } else {
                 for (int j = 0; j < i; j++) { a1.bigint.push_back(0); }
                 b1.bigint.push_back(carry);
-                int limit = a1.size() - 1 - b1.size();
-                for (int j = 0; j < limit; j++) { b1.bigint.push_back(0); }
+                for (int j = 0; j < i - 1; j++) { b1.bigint.push_back(0); }
 
                 for (int j = 0; j < i; j++) {
-                    while (a1 >= b1) {
-                        a1 = a1 - b1;
-                        tmp++;
+                    if (a1 < b1) { tmp = 0; }
+                    else {
+                        while (a1 >= b1) {
+                            a1 = a1 - b1;
+                            tmp++;
+                        }
                     }
+
                     result.bigint.push_back(tmp);
                     b1.bigint.pop_back();
                     tmp = 0;
@@ -328,14 +331,16 @@ BigInt BigInt::divide(const BigInt &x, int i) const {
 
             result.bigint.push_back(0.1);
             for (int j = 0; j < i; j++) { a1.bigint.push_back(0); }
-            int limit = a1.size() - 1 - b1.size();
-            for (int j = 0; j < limit; j++) { b1.bigint.push_back(0); }
+            for (int j = 0; j < i - 1; j++) { b1.bigint.push_back(0); }
 
             int tmp = 0;
             for (int j = 0; j < i; j++) {
-                while (a1 >= b1) {
-                    a1 = a1 - b1;
-                    tmp++;
+                if (a1 < b1) { tmp = 0; }
+                else {
+                    while (a1 >= b1) {
+                        a1 = a1 - b1;
+                        tmp++;
+                    }
                 }
                 result.bigint.push_back(tmp);
                 b1.bigint.pop_back();
