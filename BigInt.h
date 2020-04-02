@@ -10,16 +10,14 @@
 #include <string>
 #include <regex>
 
-using namespace std;
-
 class BigInt {
     /**
      *  Define a BigInt class which can do mathematical operations include plus, minus, multiplication,
      * division and so on on BigInt.
      */
-    friend istream &operator>>(istream &, BigInt &);
+    friend std::istream &operator>>(std::istream &, BigInt &);
 
-    friend ostream &operator<<(ostream &, const BigInt &);
+    friend std::ostream &operator<<(std::ostream &, const BigInt &);
 
     friend BigInt operator+(BigInt &, BigInt &);
 
@@ -60,7 +58,7 @@ public:
 
     ~BigInt() = default;
 
-    BigInt &operator=(string &);
+    BigInt &operator=(std::string &);
 
     BigInt &operator++(int);
 
@@ -75,7 +73,7 @@ public:
     BigInt divide(const BigInt &, int = 5) const;
 
 private:
-    vector<double> bigint;
+    std::vector<double> bigint;
 
 private:
     int cmp(const BigInt &) const;

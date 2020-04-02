@@ -9,7 +9,7 @@
 #include <regex>
 #include<complex>
 
-typedef complex<double> C;
+typedef std::complex<double> C;
 
 const double PI(acos(-1.0));
 const int N = static_cast<const int>(1e4);
@@ -49,9 +49,9 @@ int trans(int x) {
     return 1 << int(ceil(log(x) / log(2) - 1e-9));  // math.h/log() 以e为底
 }
 
-istream &operator>>(istream &in, BigInt &x) {
+std::istream &operator>>(std::istream &in, BigInt &x) {
 //    Use operator>> to input.
-    string tmp;
+    std::string tmp;
     in >> tmp;
     for (char &i : tmp) {
 //        Method to deal with '-' while inputting.
@@ -61,7 +61,7 @@ istream &operator>>(istream &in, BigInt &x) {
     return in;
 }
 
-ostream &operator<<(ostream &out, const BigInt &x) {
+std::ostream &operator<<(std::ostream &out, const BigInt &x) {
 //    Use operator<< to output.
     if (x.bigint[0] == -1) {
 //        Method to deal with '-' while outputting.
@@ -107,7 +107,7 @@ ostream &operator<<(ostream &out, const BigInt &x) {
     return out;
 }
 
-BigInt &BigInt::operator=(string &s) {
+BigInt &BigInt::operator=(std::string &s) {
 //    Assignment function.
     for (char &i : s) {
         if (i == '-') this->bigint.push_back(-1);
@@ -367,7 +367,7 @@ BigInt operator+(BigInt &a, BigInt &b) {
 //    Reload operator '+'
     BigInt result;
 
-    vector<double>::iterator it;
+    std::vector<double>::iterator it;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
         it = a.bigint.begin();
         a.bigint.erase(it);
@@ -396,7 +396,7 @@ BigInt operator-(BigInt &a, BigInt &b) {
 //    Reload operator ‘-’
     BigInt result;
 
-    vector<double>::iterator it;
+    std::vector<double>::iterator it;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
         it = a.bigint.begin();
         a.bigint.erase(it);
@@ -424,7 +424,7 @@ BigInt operator-(BigInt &a, BigInt &b) {
 BigInt operator*(BigInt &a, BigInt &b) {
     BigInt result;
 
-    vector<double>::iterator it;
+    std::vector<double>::iterator it;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
         it = a.bigint.begin();
         a.bigint.erase(it);
@@ -455,7 +455,7 @@ BigInt operator*(BigInt &a, BigInt &b) {
 BigInt operator/(BigInt &a, BigInt &b) {
     BigInt result;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
-        vector<double>::iterator it;
+        std::vector<double>::iterator it;
         it = a.bigint.begin();
         a.bigint.erase(it);
 
@@ -464,7 +464,7 @@ BigInt operator/(BigInt &a, BigInt &b) {
 
         result = a.divide(b);
     } else if (a.bigint[0] == -1 && b.bigint[0] != -1) {
-        vector<double>::iterator it;
+        std::vector<double>::iterator it;
         it = a.bigint.begin();
         a.bigint.erase(it);
 
@@ -472,7 +472,7 @@ BigInt operator/(BigInt &a, BigInt &b) {
         it = result.bigint.begin();
         result.bigint.insert(it, -1);
     } else if (a.bigint[0] != -1 && b.bigint[0] == -1) {
-        vector<double>::iterator it;
+        std::vector<double>::iterator it;
         it = b.bigint.begin();
         b.bigint.erase(it);
 
@@ -489,7 +489,7 @@ BigInt operator/(BigInt &a, BigInt &b) {
 BigInt operator%(BigInt &a, BigInt &b) {
     BigInt result;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
-        vector<double>::iterator it;
+        std::vector<double>::iterator it;
         it = a.bigint.begin();
         a.bigint.erase(it);
 
@@ -500,13 +500,13 @@ BigInt operator%(BigInt &a, BigInt &b) {
         it = result.bigint.begin();
         result.bigint.insert(it, -1);
     } else if (a.bigint[0] == -1 && b.bigint[0] != -1) {
-        vector<double>::iterator it;
+        std::vector<double>::iterator it;
         it = a.bigint.begin();
         a.bigint.erase(it);
 
         result = a.mod(b);
     } else if (a.bigint[0] != -1 && b.bigint[0] == -1) {
-        vector<double>::iterator it;
+        std::vector<double>::iterator it;
         it = b.bigint.begin();
         b.bigint.erase(it);
 

@@ -2,7 +2,7 @@
 #include <thread>
 #include <mutex>
 #include "BigInt.h"
-
+//TODO(NPU-Franklin): add comments.
 using namespace std;
 
 mutex mu;
