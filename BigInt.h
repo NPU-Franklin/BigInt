@@ -1,5 +1,10 @@
 //
-// Created by NPU-Franklin on 2020/3/31.
+//@brief: Definitions for BigInt class.
+//@copyright: Copyright NPU-Franklin 2020
+//@license: MIT License
+//@birth: created by NPU-Franklin 2020-3-31
+//@version: 4.0.2
+//@revision: last revised by NPU-Franklin 2020-4-4
 //
 
 #ifndef BIGINT_BIGINT_H
@@ -8,12 +13,15 @@
 
 #include <vector>
 #include <string>
-#include <regex>
 
 class BigInt {
     /**
      *  Define a BigInt class which can do mathematical operations include plus, minus, multiplication,
-     * division and so on on BigInt.
+     * division and so on on BigInt.The operations is just the same as what we can do on int type.
+     * ATTENTION: When you do division on two BigInt developer offered you two ways:
+     * (Suppose we have BigInt a, b;)
+     *  1. a / b with no decimal
+     *  2. a.divide(b, <decimal digit>)
      */
     friend std::istream &operator>>(std::istream &, BigInt &);
 
@@ -70,7 +78,7 @@ public:
 
     inline int size() const;
 
-    BigInt divide(const BigInt &, int = 5) const;
+    BigInt divide(const BigInt &, int = 0) const;
 
 private:
     std::vector<double> bigint;

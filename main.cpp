@@ -1,8 +1,17 @@
+//
+//@brief: Main function based on BigInt class to do math operations on bigint.
+//@copyright: Copyright NPU-Franklin 2020
+//@license: MIT License
+//@birth: created by NPU-Franklin 2020-3-31
+//@version: 4.0.2
+//@revision: last revised by NPU-Franklin 2020-4-4
+//
+
 #include <iostream>
 #include <thread>
 #include <mutex>
 #include "BigInt.h"
-//TODO(NPU-Franklin): add comments.
+
 using namespace std;
 
 mutex mu;

@@ -1,5 +1,10 @@
 //
-// Created by NPU-Franklin on 2020/3/31.
+//@brief: Implementations of BigInt class.
+//@copyright: Copyright NPU-Franklin 2020
+//@license: MIT License
+//@birth: created by NPU-Franklin 2020-3-31
+//@version: 4.0.2
+//@revision: last revised by NPU-Franklin 2020-4-4
 //
 
 #include "BigInt.h"
@@ -9,29 +14,29 @@
 #include <regex>
 #include<complex>
 
-typedef std::complex<double> C;
+typedef std::complex<double> complex;
 
 const double PI(acos(-1.0));
 const int N = static_cast<const int>(1e4);
 
-void bit_reverse_swap(C *a, int n) {
+//binary method for multiplication.
+void bit_reverse_swap(complex *a, int n) {
     for (int i = 1, j = n >> 1, k; i < n - 1; ++i) {
         if (i < j) swap(a[i], a[j]);
-        // tricky
-        for (k = n >> 1; j >= k; j -= k, k >>= 1)  // inspect the highest "1"
-            ;
+        for (k = n >> 1; j >= k; j -= k, k >>= 1);
         j += k;
     }
 }
 
-void FFT(C *a, int n, int t) {
+//FFT method to do multiplication.
+void FFT(complex *a, int n, int t) {
     bit_reverse_swap(a, n);
     for (int i = 2; i <= n; i <<= 1) {
-        C wi(cos(2.0 * t * PI / i), sin(2.0 * t * PI / i));
+        complex wi(cos(2.0 * t * PI / i), sin(2.0 * t * PI / i));
         for (int j = 0; j < n; j += i) {
-            C w(1);
+            complex w(1);
             for (int k = j, h = i >> 1; k < j + h; ++k) {
-                C t = w * a[k + h], u = a[k];
+                complex t = w * a[k + h], u = a[k];
                 a[k] = u + t;
                 a[k + h] = u - t;
                 w *= wi;
@@ -45,6 +50,7 @@ void FFT(C *a, int n, int t) {
     }
 }
 
+//binary method to do multiplication.
 int trans(int x) {
     return 1 << int(ceil(log(x) / log(2) - 1e-9));  // math.h/log() 以e为底
 }
@@ -64,7 +70,7 @@ std::istream &operator>>(std::istream &in, BigInt &x) {
 std::ostream &operator<<(std::ostream &out, const BigInt &x) {
 //    Use operator<< to output.
     if (x.bigint[0] == -1) {
-//        Method to deal with '-' while outputting.
+//        Method to deal with '-'&'.' while outputting.
         out << "-";
         int len = x.bigint.size();
         for (int i = 1; i < len; i++) {
@@ -115,6 +121,7 @@ BigInt &BigInt::operator=(std::string &s) {
     }
 }
 
+//function to compare two BigInt and return specific code for each situation.
 int BigInt::cmp(const BigInt &x) const {
 //    If caller is bigger than return 0, otherwise return 1, if is equal return 2.
     if (this->bigint[0] != -1 && x.bigint[0] != -1) {
@@ -227,18 +234,19 @@ BigInt BigInt::minus(const BigInt &b) const {
 
 }
 
+//multiplication based on FFT.
 BigInt BigInt::multiply(const BigInt &x) const {
     BigInt result;
     int n, m, l;
     n = static_cast<int>(this->bigint.size());
     m = static_cast<int>(x.bigint.size());
     l = trans(n + m - 1);
-    C a[N], b[N];
+    complex a[N], b[N];
     int ans[N];
-    for (int i = 0; i < n; ++i) a[i] = C(this->bigint[n - 1 - i]);
-    for (int i = n; i < l; ++i) a[i] = C(0);
-    for (int i = 0; i < m; ++i) b[i] = C(x.bigint[m - 1 - i]);
-    for (int i = m; i < l; ++i) b[i] = C(0);
+    for (int i = 0; i < n; ++i) a[i] = complex(this->bigint[n - 1 - i]);
+    for (int i = n; i < l; ++i) a[i] = complex(0);
+    for (int i = 0; i < m; ++i) b[i] = complex(x.bigint[m - 1 - i]);
+    for (int i = m; i < l; ++i) b[i] = complex(0);
 
     FFT(a, l, 1);
     FFT(b, l, 1);
@@ -258,7 +266,7 @@ BigInt BigInt::multiply(const BigInt &x) const {
 }
 
 BigInt BigInt::divide(const BigInt &x, int i) const {
-//    Division method, which default reserve digits is 3.
+//    Division method, which default reserved digits is 0.
     BigInt a1, b1, result;
     if (i < 0) { throw "Invalid reservation digits."; }
     if (x.bigint[0] == 0 && x.size() == 1) { throw "Can't divide by zero."; }
@@ -352,6 +360,7 @@ BigInt BigInt::divide(const BigInt &x, int i) const {
     return result;
 }
 
+//modulo function
 BigInt BigInt::mod(const BigInt &a) const {
     BigInt a1, b1, result;
     a1 = *this;
@@ -422,6 +431,7 @@ BigInt operator-(BigInt &a, BigInt &b) {
 }
 
 BigInt operator*(BigInt &a, BigInt &b) {
+//    Reload operator '*'
     BigInt result;
 
     std::vector<double>::iterator it;
@@ -453,6 +463,7 @@ BigInt operator*(BigInt &a, BigInt &b) {
 }
 
 BigInt operator/(BigInt &a, BigInt &b) {
+//    Reload operator '/'
     BigInt result;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
         std::vector<double>::iterator it;
@@ -487,6 +498,7 @@ BigInt operator/(BigInt &a, BigInt &b) {
 }
 
 BigInt operator%(BigInt &a, BigInt &b) {
+//    Reload operator '%'
     BigInt result;
     if (a.bigint[0] == -1 && b.bigint[0] == -1) {
         std::vector<double>::iterator it;
@@ -521,31 +533,37 @@ BigInt operator%(BigInt &a, BigInt &b) {
 }
 
 BigInt operator+=(BigInt &a, BigInt &b) {
+//    Reload operator '+='
     a = a + b;
     return a;
 }
 
 BigInt operator-=(BigInt &a, BigInt &b) {
+//    Reload operator '-='
     a = a - b;
     return a;
 }
 
 BigInt operator*=(BigInt &a, BigInt &b) {
+//    Reload operator '*='
     a = a * b;
     return a;
 }
 
 BigInt operator/=(BigInt &a, BigInt &b) {
+//    Reload operator '/='
     a = a / b;
     return a;
 }
 
 BigInt operator%=(BigInt &a, BigInt &b) {
+//    Reload operator '%='
     a = a % b;
     return a;
 }
 
 BigInt pow(BigInt &a, int n) {
+//    ordinary method to calculate power.
     BigInt result;
     result.bigint.push_back(1);
     for (int i = 0; i < n; i++) {
