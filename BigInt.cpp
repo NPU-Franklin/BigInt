@@ -14,13 +14,13 @@
 #include <regex>
 #include<complex>
 
-typedef std::complex<double> complex;
+typedef std::complex<double> comp;
 
 const double PI(acos(-1.0));
 const int N = static_cast<const int>(1e4);
 
 //binary method for multiplication.
-void bit_reverse_swap(complex *a, int n) {
+void bit_reverse_swap(comp *a, int n) {
     for (int i = 1, j = n >> 1, k; i < n - 1; ++i) {
         if (i < j) swap(a[i], a[j]);
         for (k = n >> 1; j >= k; j -= k, k >>= 1);
@@ -29,14 +29,14 @@ void bit_reverse_swap(complex *a, int n) {
 }
 
 //FFT method to do multiplication.
-void FFT(complex *a, int n, int t) {
+void FFT(comp *a, int n, int t) {
     bit_reverse_swap(a, n);
     for (int i = 2; i <= n; i <<= 1) {
-        complex wi(cos(2.0 * t * PI / i), sin(2.0 * t * PI / i));
+        comp wi(cos(2.0 * t * PI / i), sin(2.0 * t * PI / i));
         for (int j = 0; j < n; j += i) {
-            complex w(1);
+            comp w(1);
             for (int k = j, h = i >> 1; k < j + h; ++k) {
-                complex t = w * a[k + h], u = a[k];
+                comp t = w * a[k + h], u = a[k];
                 a[k] = u + t;
                 a[k + h] = u - t;
                 w *= wi;
@@ -241,12 +241,12 @@ BigInt BigInt::multiply(const BigInt &x) const {
     n = static_cast<int>(this->bigint.size());
     m = static_cast<int>(x.bigint.size());
     l = trans(n + m - 1);
-    complex a[N], b[N];
+    comp a[N], b[N];
     int ans[N];
-    for (int i = 0; i < n; ++i) a[i] = complex(this->bigint[n - 1 - i]);
-    for (int i = n; i < l; ++i) a[i] = complex(0);
-    for (int i = 0; i < m; ++i) b[i] = complex(x.bigint[m - 1 - i]);
-    for (int i = m; i < l; ++i) b[i] = complex(0);
+    for (int i = 0; i < n; ++i) a[i] = comp(this->bigint[n - 1 - i]);
+    for (int i = n; i < l; ++i) a[i] = comp(0);
+    for (int i = 0; i < m; ++i) b[i] = comp(x.bigint[m - 1 - i]);
+    for (int i = m; i < l; ++i) b[i] = comp(0);
 
     FFT(a, l, 1);
     FFT(b, l, 1);

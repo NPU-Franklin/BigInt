@@ -22,27 +22,27 @@ int main() {
 
     thread thread0([&a, &b] {
         mu.lock();
-        cout << a + b << endl;
+        cout << "a + b = " << a + b << endl;
         mu.unlock();
     });
     thread thread1([&a, &b] {
         mu.lock();
-        cout << a - b << endl;
+        cout << "a - b = " << a - b << endl;
         mu.unlock();
     });
     thread thread2([&a, &b] {
         mu.lock();
-        cout << a * b << endl;
+        cout << "a * b = " << a * b << endl;
         mu.unlock();
     });
     thread thread3([&a, &b] {
         mu.lock();
-        cout << a / b << endl;
+        cout << "a / b = " << a / b << endl;
         mu.unlock();
     });
     thread thread4([&a, &b] {
         mu.lock();
-        cout << a % b << endl;
+        cout << "a % b = " << a % b << endl;
         mu.unlock();
     });
 
